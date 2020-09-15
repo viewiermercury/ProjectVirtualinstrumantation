@@ -1,0 +1,2137 @@
+= Documentacion Primer Parcial
+José Nájera <joserock19@live.com.mx>
+:doctype: book
+:toc: 
+:imagesdir: Images
+:sectnums: 
+:toclevels: 3
+:chapter-label: Section
+
+== Project description
+
+No description found (add content in project description)
+
+== Code component descriptions
+
+=== DQMH(R) modules
+
+This section describes DQMH(R) module responsibilities and relationships.
+
+==== Preamble
+
+A DQMH module is the main component of an architecture based on DQMH(R) framework. A DQMH module is used to implement a section of the application that has one responsibility.
+
+DQMH(R) framework defines two different type of DQMH module.  
+
+====
+*Singleton:*
+
+A Singleton DQMH module can have only one instance running at any given time.
+====
+
+====
+*Cloneable:*
+
+A Cloneable DQMH module can have one or multiple instances running in parallel.
+====
+
+DQMH(R) framework defines two different ways to carry data throughout the application and with both other DQMH modules and non-DQMH based code.
+
+====
+*Request events:*
+
+A request is a code that fires an event requesting the DQMH module to do something. Multiple locations in the code can send events to the DQMH module.
+
+Request events are many-to-one.
+
+Requests are usually named using imperative tense.
+====
+
+====
+*Broadcast events:*
+
+A broadcast is a code that fires an event broadcasting that the DQMH module did something. Multiple Event Structures can register to handle the Broadcast Events.
+
+Broadcast Events are one-to-many.
+
+Broadcasts are usually named using past tense or passive voice.
+====
+
+NOTE: Refer to the DQMH(R) framework official http://delacor.com/documentation/dqmh-html/[documentation] to find more details on how the framework works
+
+
+The following section gives you details on the project architecture relying on this framework.
+It gives you an overview of the modules' interaction and detailed information on each module.
+
+Graphs used in this section have the following legend:
+
+*Components:*
+
+
+[graphviz, format="png", align="center"]
+....
+digraph G569292 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"DQMH module / Lvlib"[color=black shape=component]
+"Vi"[color=skyblue shape=note]
+}
+....
+
+*Events:*
+
+[graphviz, format="png", align="center"]
+....
+digraph G818431 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+" "[color=white shape=box]
+"  "[color=white shape=box]
+"   "[color=white shape=box]
+"    "[color=white shape=box]
+" " -> "  " [label="Request to a DQMH module" dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"   " -> "    " [label="Broadcast from a DQMH module" dir=both color=goldenrod  arrowhead=normal arrowtail=none style=dashed penwidth=1];
+}
+....
+
+*Start and Stop module callers:*
+
+[graphviz, format="png", align="center"]
+....
+digraph G428426 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Start Module
+caller"[color=black shape=component]
+"Start Module"[color=yellowgreen shape=note]
+"Start Module" -> "Start Module
+caller" [label="Called by" dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+}
+....
+
+[graphviz, format="png", align="center"]
+....
+digraph G552618 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Stop Module
+caller"[color=black shape=component]
+"Stop Module"[color=tomato shape=note]
+"Stop Module" -> "Stop Module
+caller" [label="Called by" dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+}
+....
+
+
+==== Modules overview
+
+This project contains the following modules.
+
+.Modules list
+|===
+|Singleton|Cloneable
+
+|<<Adquisition.lvlib>>
+|
+
+|<<Analisis.lvlib>>
+|
+
+|<<Base de datos.lvlib>>
+|
+
+|<<config.lvlib>>
+|
+
+|<<Mensajes .lvlib>>
+|
+
+|<<UI.lvlib>>
+|
+|===
+
+This graph represents the links between all DQMH modules.
+
+[graphviz, format="png", align="center"]
+....
+digraph G823878 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"UI"[color=black shape=component]
+"Adquisition"[color=black shape=component]
+"Analisis"[color=black shape=component]
+"config"[color=black shape=component]
+"Base de datos"[color=black shape=component]
+"Mensajes "[color=black shape=component]
+"Adquisition" -> "Adquisition" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"UI" -> "Adquisition" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Analisis" -> "Analisis" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"UI" -> "Analisis" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Adquisition" -> "Analisis" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"config" -> "Analisis" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Base de datos" -> "Base de datos" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"UI" -> "Base de datos" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"UI" -> "config" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"config" -> "config" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Mensajes " -> "Mensajes " [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"UI" -> "Mensajes " [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Analisis" -> "Mensajes " [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"config" -> "Mensajes " [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"UI" -> "UI" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+}
+....
+
+
+==== Adquisition.lvlib
+
+*Type:* Singleton
+
+*Responsibility*: No description found (add content in DQMH module lvlib description)
+
+===== Module Start/Stop calls
+
+[graphviz, format="png", align="center"]
+....
+digraph G235677 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Start Module"[color=yellowgreen shape=note]
+"UI"[color=black shape=component]
+"Test Adquisition API"[color=skyblue shape=note]
+"Stop Module"[color=tomato shape=note]
+"Adquisition"[color=black shape=component]
+"Start Module" -> "UI" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Start Module" -> "Test Adquisition API" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Stop Module" -> "Adquisition" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "UI" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "Test Adquisition API" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+}
+....
+
+.Start and Stop module callers
+|===
+|Function|Callers
+
+|<<Adquisition.lvlib:Start Module.vi>>
+|UI.lvlib:Main.vi +
+Test Adquisition API.vi
+
+|<<Adquisition.lvlib:Stop Module.vi>>
+|Adquisition.lvlib:Handle Exit.vi +
+UI.lvlib:Main.vi +
+Test Adquisition API.vi
+|===
+
+===== Module relationship
+
+[graphviz, format="png", align="center"]
+....
+digraph G683678 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Adquisition"[color=slateblue shape=component]
+"UI"[color=black shape=component]
+"Test Adquisition API"[color=skyblue shape=note]
+"Analisis"[color=black shape=component]
+"UI" -> "Adquisition" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Test Adquisition API" -> "Adquisition" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Adquisition" -> "Adquisition" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Adquisition" -> "Test Adquisition API" [label=" " dir=both color=goldenrod  arrowhead=normal arrowtail=none style=dashed penwidth=1];
+"Adquisition" -> "Adquisition" [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+"Adquisition" -> "Analisis" [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+}
+....
+
+.Requests callers
+|===
+|Request Name|Callers
+
+|<<Adquisition.lvlib:Show Panel.vi>>
+|Test Adquisition API.vi
+
+|<<Adquisition.lvlib:Hide Panel.vi>>
+|Test Adquisition API.vi
+
+|<<Adquisition.lvlib:Get Module Execution Status.vi>>
+|Adquisition.lvlib:Start Module.vi +
+Adquisition.lvlib:Obtain Broadcast Events for Registration.vi
+
+|<<Adquisition.lvlib:Show Diagram.vi>>
+|Test Adquisition API.vi
+
+|<<Adquisition.lvlib:start adquisition.vi>>
+|UI.lvlib:Main.vi +
+Test Adquisition API.vi
+
+|<<Adquisition.lvlib:stop adquisition.vi>>
+|Test Adquisition API.vi
+
+|<<Adquisition.lvlib:color selection.vi>>
+|Test Adquisition API.vi
+|===
+
+.Broadcasts Listeners
+|===
+|Broadcast Name|Listeners
+
+|<<Adquisition.lvlib:Module Did Init.vi>>
+|Test Adquisition API.vi
+
+|<<Adquisition.lvlib:Status Updated.vi>>
+|Test Adquisition API.vi
+
+|<<Adquisition.lvlib:Error Reported.vi>>
+|Test Adquisition API.vi
+
+|<<Adquisition.lvlib:Module Did Stop.vi>>
+|Test Adquisition API.vi
+
+|<<Adquisition.lvlib:Update Module Execution Status.vi>>
+|Test Adquisition API.vi
+|===
+
+.Used requests
+|===
+|Module|Brodcasts
+
+|<<Adquisition.lvlib>>
+|Adquisition.lvlib:Get Module Execution Status.vi
+
+|<<Analisis.lvlib>>
+|Analisis.lvlib:datos.vi
+|===
+
+.Registred broadcast
+|===
+|Module|Brodcasts
+
+|--
+|--
+|===
+
+==== Analisis.lvlib
+
+*Type:* Singleton
+
+*Responsibility*: No description found (add content in DQMH module lvlib description)
+
+===== Module Start/Stop calls
+
+[graphviz, format="png", align="center"]
+....
+digraph G751861 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Start Module"[color=yellowgreen shape=note]
+"UI"[color=black shape=component]
+"Test Analisis API"[color=skyblue shape=note]
+"Stop Module"[color=tomato shape=note]
+"Analisis"[color=black shape=component]
+"Start Module" -> "UI" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Start Module" -> "Test Analisis API" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Stop Module" -> "Analisis" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "UI" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "Test Analisis API" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+}
+....
+
+.Start and Stop module callers
+|===
+|Function|Callers
+
+|<<Analisis.lvlib:Start Module.vi>>
+|UI.lvlib:Main.vi +
+Test Analisis API.vi
+
+|<<Analisis.lvlib:Stop Module.vi>>
+|Analisis.lvlib:Handle Exit.vi +
+UI.lvlib:Main.vi +
+Test Analisis API.vi
+|===
+
+===== Module relationship
+
+[graphviz, format="png", align="center"]
+....
+digraph G912345 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Analisis"[color=slateblue shape=component]
+"UI"[color=black shape=component]
+"Test Analisis API"[color=skyblue shape=note]
+"Adquisition"[color=black shape=component]
+"config"[color=black shape=component]
+"Mensajes "[color=black shape=component]
+"UI" -> "Analisis" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Test Analisis API" -> "Analisis" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Analisis" -> "Analisis" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Adquisition" -> "Analisis" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"config" -> "Analisis" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Analisis" -> "Test Analisis API" [label=" " dir=both color=goldenrod  arrowhead=normal arrowtail=none style=dashed penwidth=1];
+"Analisis" -> "Analisis" [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+"Analisis" -> "Mensajes " [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+}
+....
+
+.Requests callers
+|===
+|Request Name|Callers
+
+|<<Analisis.lvlib:Show Panel.vi>>
+|Test Analisis API.vi
+
+|<<Analisis.lvlib:Hide Panel.vi>>
+|Test Analisis API.vi
+
+|<<Analisis.lvlib:Get Module Execution Status.vi>>
+|Analisis.lvlib:Start Module.vi +
+Analisis.lvlib:Obtain Broadcast Events for Registration.vi
+
+|<<Analisis.lvlib:Show Diagram.vi>>
+|Test Analisis API.vi
+
+|<<Analisis.lvlib:datos.vi>>
+|Adquisition.lvlib:Main.vi +
+Test Analisis API.vi
+
+|<<Analisis.lvlib:Config.vi>>
+|config.lvlib:Main.vi +
+Test Analisis API.vi
+|===
+
+.Broadcasts Listeners
+|===
+|Broadcast Name|Listeners
+
+|<<Analisis.lvlib:Module Did Init.vi>>
+|Test Analisis API.vi
+
+|<<Analisis.lvlib:Status Updated.vi>>
+|Test Analisis API.vi
+
+|<<Analisis.lvlib:Error Reported.vi>>
+|Test Analisis API.vi
+
+|<<Analisis.lvlib:Module Did Stop.vi>>
+|Test Analisis API.vi
+
+|<<Analisis.lvlib:Update Module Execution Status.vi>>
+|Test Analisis API.vi
+|===
+
+.Used requests
+|===
+|Module|Brodcasts
+
+|<<Analisis.lvlib>>
+|Analisis.lvlib:Get Module Execution Status.vi
+
+|<<Mensajes .lvlib>>
+|Mensajes .lvlib:publicar mensaje.vi
+|===
+
+.Registred broadcast
+|===
+|Module|Brodcasts
+
+|--
+|--
+|===
+
+==== Base de datos.lvlib
+
+*Type:* Singleton
+
+*Responsibility*: No description found (add content in DQMH module lvlib description)
+
+===== Module Start/Stop calls
+
+[graphviz, format="png", align="center"]
+....
+digraph G64625 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Start Module"[color=yellowgreen shape=note]
+"UI"[color=black shape=component]
+"Test Base de datos API"[color=skyblue shape=note]
+"Stop Module"[color=tomato shape=note]
+"Base de datos"[color=black shape=component]
+"Start Module" -> "UI" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Start Module" -> "Test Base de datos API" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Stop Module" -> "Base de datos" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "UI" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "Test Base de datos API" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+}
+....
+
+.Start and Stop module callers
+|===
+|Function|Callers
+
+|<<Base de datos.lvlib:Start Module.vi>>
+|UI.lvlib:Main.vi +
+Test Base de datos API.vi
+
+|<<Base de datos.lvlib:Stop Module.vi>>
+|Base de datos.lvlib:Handle Exit.vi +
+UI.lvlib:Main.vi +
+Test Base de datos API.vi
+|===
+
+===== Module relationship
+
+[graphviz, format="png", align="center"]
+....
+digraph G73960 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Base de datos"[color=slateblue shape=component]
+"UI"[color=black shape=component]
+"Test Base de datos API"[color=skyblue shape=note]
+"UI" -> "Base de datos" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Test Base de datos API" -> "Base de datos" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Base de datos" -> "Base de datos" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Base de datos" -> "Test Base de datos API" [label=" " dir=both color=goldenrod  arrowhead=normal arrowtail=none style=dashed penwidth=1];
+"Base de datos" -> "Base de datos" [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+}
+....
+
+.Requests callers
+|===
+|Request Name|Callers
+
+|<<Base de datos.lvlib:Show Panel.vi>>
+|UI.lvlib:Main.vi +
+Test Base de datos API.vi
+
+|<<Base de datos.lvlib:Hide Panel.vi>>
+|Test Base de datos API.vi
+
+|<<Base de datos.lvlib:Get Module Execution Status.vi>>
+|Base de datos.lvlib:Start Module.vi +
+Base de datos.lvlib:Obtain Broadcast Events for Registration.vi
+
+|<<Base de datos.lvlib:Show Diagram.vi>>
+|Test Base de datos API.vi
+|===
+
+.Broadcasts Listeners
+|===
+|Broadcast Name|Listeners
+
+|<<Base de datos.lvlib:Module Did Init.vi>>
+|Test Base de datos API.vi
+
+|<<Base de datos.lvlib:Status Updated.vi>>
+|Test Base de datos API.vi
+
+|<<Base de datos.lvlib:Error Reported.vi>>
+|Test Base de datos API.vi
+
+|<<Base de datos.lvlib:Module Did Stop.vi>>
+|Test Base de datos API.vi
+
+|<<Base de datos.lvlib:Update Module Execution Status.vi>>
+|Test Base de datos API.vi
+|===
+
+.Used requests
+|===
+|Module|Brodcasts
+
+|<<Base de datos.lvlib>>
+|Base de datos.lvlib:Get Module Execution Status.vi
+|===
+
+.Registred broadcast
+|===
+|Module|Brodcasts
+
+|--
+|--
+|===
+
+==== config.lvlib
+
+*Type:* Singleton
+
+*Responsibility*: No description found (add content in DQMH module lvlib description)
+
+===== Module Start/Stop calls
+
+[graphviz, format="png", align="center"]
+....
+digraph G55199 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Start Module"[color=yellowgreen shape=note]
+"UI"[color=black shape=component]
+"Test config API"[color=skyblue shape=note]
+"Stop Module"[color=tomato shape=note]
+"config"[color=black shape=component]
+"Start Module" -> "UI" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Start Module" -> "Test config API" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Stop Module" -> "config" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "UI" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "Test config API" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+}
+....
+
+.Start and Stop module callers
+|===
+|Function|Callers
+
+|<<config.lvlib:Start Module.vi>>
+|UI.lvlib:Main.vi +
+Test config API.vi
+
+|<<config.lvlib:Stop Module.vi>>
+|config.lvlib:Handle Exit.vi +
+UI.lvlib:Main.vi +
+Test config API.vi
+|===
+
+===== Module relationship
+
+[graphviz, format="png", align="center"]
+....
+digraph G20338 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"config"[color=slateblue shape=component]
+"UI"[color=black shape=component]
+"Test config API"[color=skyblue shape=note]
+"Analisis"[color=black shape=component]
+"Mensajes "[color=black shape=component]
+"UI" -> "config" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Test config API" -> "config" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"config" -> "config" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"config" -> "Test config API" [label=" " dir=both color=goldenrod  arrowhead=normal arrowtail=none style=dashed penwidth=1];
+"config" -> "Analisis" [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+"config" -> "config" [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+"config" -> "Mensajes " [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+}
+....
+
+.Requests callers
+|===
+|Request Name|Callers
+
+|<<config.lvlib:Show Panel.vi>>
+|UI.lvlib:Main.vi +
+Test config API.vi
+
+|<<config.lvlib:Hide Panel.vi>>
+|Test config API.vi
+
+|<<config.lvlib:Get Module Execution Status.vi>>
+|config.lvlib:Start Module.vi +
+config.lvlib:Obtain Broadcast Events for Registration.vi
+
+|<<config.lvlib:Show Diagram.vi>>
+|Test config API.vi
+|===
+
+.Broadcasts Listeners
+|===
+|Broadcast Name|Listeners
+
+|<<config.lvlib:Module Did Init.vi>>
+|Test config API.vi
+
+|<<config.lvlib:Status Updated.vi>>
+|Test config API.vi
+
+|<<config.lvlib:Error Reported.vi>>
+|Test config API.vi
+
+|<<config.lvlib:Module Did Stop.vi>>
+|Test config API.vi
+
+|<<config.lvlib:Update Module Execution Status.vi>>
+|Test config API.vi
+|===
+
+.Used requests
+|===
+|Module|Brodcasts
+
+|<<Analisis.lvlib>>
+|Analisis.lvlib:Config.vi
+
+|<<config.lvlib>>
+|config.lvlib:Get Module Execution Status.vi
+
+|<<Mensajes .lvlib>>
+|Mensajes .lvlib:publicar mensaje.vi
+|===
+
+.Registred broadcast
+|===
+|Module|Brodcasts
+
+|--
+|--
+|===
+
+==== Mensajes .lvlib
+
+*Type:* Singleton
+
+*Responsibility*: No description found (add content in DQMH module lvlib description)
+
+===== Module Start/Stop calls
+
+[graphviz, format="png", align="center"]
+....
+digraph G651056 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Start Module"[color=yellowgreen shape=note]
+"UI"[color=black shape=component]
+"Test Mensajes  API"[color=skyblue shape=note]
+"Stop Module"[color=tomato shape=note]
+"Mensajes "[color=black shape=component]
+"Start Module" -> "UI" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Start Module" -> "Test Mensajes  API" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Stop Module" -> "Mensajes " [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "UI" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "Test Mensajes  API" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+}
+....
+
+.Start and Stop module callers
+|===
+|Function|Callers
+
+|<<Mensajes .lvlib:Start Module.vi>>
+|UI.lvlib:Main.vi +
+Test Mensajes  API.vi
+
+|<<Mensajes .lvlib:Stop Module.vi>>
+|Mensajes .lvlib:Handle Exit.vi +
+UI.lvlib:Main.vi +
+Test Mensajes  API.vi
+|===
+
+===== Module relationship
+
+[graphviz, format="png", align="center"]
+....
+digraph G996433 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Mensajes "[color=slateblue shape=component]
+"UI"[color=black shape=component]
+"Test Mensajes  API"[color=skyblue shape=note]
+"Analisis"[color=black shape=component]
+"config"[color=black shape=component]
+"UI" -> "Mensajes " [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Test Mensajes  API" -> "Mensajes " [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Mensajes " -> "Mensajes " [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Analisis" -> "Mensajes " [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"config" -> "Mensajes " [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"Mensajes " -> "Test Mensajes  API" [label=" " dir=both color=goldenrod  arrowhead=normal arrowtail=none style=dashed penwidth=1];
+"Mensajes " -> "Mensajes " [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+}
+....
+
+.Requests callers
+|===
+|Request Name|Callers
+
+|<<Mensajes .lvlib:Show Panel.vi>>
+|Test Mensajes  API.vi
+
+|<<Mensajes .lvlib:Hide Panel.vi>>
+|Test Mensajes  API.vi
+
+|<<Mensajes .lvlib:Get Module Execution Status.vi>>
+|Mensajes .lvlib:Start Module.vi +
+Mensajes .lvlib:Obtain Broadcast Events for Registration.vi
+
+|<<Mensajes .lvlib:Show Diagram.vi>>
+|Test Mensajes  API.vi
+
+|<<Mensajes .lvlib:publicar mensaje.vi>>
+|Analisis.lvlib:Main.vi +
+config.lvlib:Main.vi +
+UI.lvlib:Main.vi +
+Test Mensajes  API.vi
+|===
+
+.Broadcasts Listeners
+|===
+|Broadcast Name|Listeners
+
+|<<Mensajes .lvlib:Module Did Init.vi>>
+|Test Mensajes  API.vi
+
+|<<Mensajes .lvlib:Status Updated.vi>>
+|Test Mensajes  API.vi
+
+|<<Mensajes .lvlib:Error Reported.vi>>
+|Test Mensajes  API.vi
+
+|<<Mensajes .lvlib:Module Did Stop.vi>>
+|Test Mensajes  API.vi
+
+|<<Mensajes .lvlib:Update Module Execution Status.vi>>
+|Test Mensajes  API.vi
+|===
+
+.Used requests
+|===
+|Module|Brodcasts
+
+|<<Mensajes .lvlib>>
+|Mensajes .lvlib:Get Module Execution Status.vi
+|===
+
+.Registred broadcast
+|===
+|Module|Brodcasts
+
+|--
+|--
+|===
+
+==== UI.lvlib
+
+*Type:* Singleton
+
+*Responsibility*: No description found (add content in DQMH module lvlib description)
+
+===== Module Start/Stop calls
+
+[graphviz, format="png", align="center"]
+....
+digraph G125054 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Start Module"[color=yellowgreen shape=note]
+"Test UI API"[color=skyblue shape=note]
+"Stop Module"[color=tomato shape=note]
+"UI"[color=black shape=component]
+"Start Module" -> "Test UI API" [dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+"Stop Module" -> "UI" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+"Stop Module" -> "Test UI API" [dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+}
+....
+
+.Start and Stop module callers
+|===
+|Function|Callers
+
+|<<UI.lvlib:Start Module.vi>>
+|Test UI API.vi
+
+|<<UI.lvlib:Stop Module.vi>>
+|UI.lvlib:Handle Exit.vi +
+Test UI API.vi
+|===
+
+===== Module relationship
+
+[graphviz, format="png", align="center"]
+....
+digraph G25730 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"UI"[color=slateblue shape=component]
+"Test UI API"[color=skyblue shape=note]
+"Adquisition"[color=black shape=component]
+"Base de datos"[color=black shape=component]
+"config"[color=black shape=component]
+"Mensajes "[color=black shape=component]
+"Test UI API" -> "UI" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"UI" -> "UI" [dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"UI" -> "Test UI API" [label=" " dir=both color=goldenrod  arrowhead=normal arrowtail=none style=dashed penwidth=1];
+"UI" -> "Adquisition" [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+"UI" -> "Base de datos" [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+"UI" -> "config" [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+"UI" -> "Mensajes " [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+"UI" -> "UI" [label="   " dir=both color=forestgreen  arrowhead=onormal arrowtail=none style=filled penwidth=1];
+}
+....
+
+.Requests callers
+|===
+|Request Name|Callers
+
+|<<UI.lvlib:Show Panel.vi>>
+|Test UI API.vi
+
+|<<UI.lvlib:Hide Panel.vi>>
+|Test UI API.vi
+
+|<<UI.lvlib:Get Module Execution Status.vi>>
+|UI.lvlib:Start Module.vi +
+UI.lvlib:Obtain Broadcast Events for Registration.vi
+
+|<<UI.lvlib:Show Diagram.vi>>
+|Test UI API.vi
+|===
+
+.Broadcasts Listeners
+|===
+|Broadcast Name|Listeners
+
+|<<UI.lvlib:Module Did Init.vi>>
+|Test UI API.vi
+
+|<<UI.lvlib:Status Updated.vi>>
+|Test UI API.vi
+
+|<<UI.lvlib:Error Reported.vi>>
+|Test UI API.vi
+
+|<<UI.lvlib:Module Did Stop.vi>>
+|Test UI API.vi
+
+|<<UI.lvlib:Update Module Execution Status.vi>>
+|Test UI API.vi
+|===
+
+.Used requests
+|===
+|Module|Brodcasts
+
+|<<Adquisition.lvlib>>
+|Adquisition.lvlib:start adquisition.vi
+
+|<<Base de datos.lvlib>>
+|Base de datos.lvlib:Show Panel.vi
+
+|<<config.lvlib>>
+|config.lvlib:Show Panel.vi
+
+|<<Mensajes .lvlib>>
+|Mensajes .lvlib:publicar mensaje.vi
+
+|<<UI.lvlib>>
+|UI.lvlib:Get Module Execution Status.vi
+|===
+
+.Registred broadcast
+|===
+|Module|Brodcasts
+
+|--
+|--
+|===
+
+=== Libraries
+
+This section describes the libraries contained in the project.
+
+=== Classes
+
+This section describes the classes contained in the project.
+
+== VI descriptions
+
+=== DQMH(R) modules
+
+This section describes DQMH(R) modules events.
+
+==== Adquisition.lvlib
+
+===== Adquisition.lvlib:Start Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: Adquisition.lvlib_Start Module.vi.png
+image::{imgpath}[Adquisition.lvlib:Start Module.vi]
+
+*Description:*
+++++
+Launches the Module Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Adquisition.lvlib:Stop Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: Adquisition.lvlib_Stop Module.vi.png
+image::{imgpath}[Adquisition.lvlib:Stop Module.vi]
+
+*Description:*
+++++
+Send the Stop request to the Module's Main.vi.
+
+If <b>Wait for Module to Stop?</b> is TRUE, this VI will wait until the module main VI stops, and will timeout at the <b>Timeout to Wait for Stop</b> value. This value defaults to "-1", which means the VI will not timeout, and will always wait until the module main VI stops before completing execution.
+
+Note: The <b>Timeout to Wait for Stop</b> value is ignored if 'Wait for Module to Stop?' is set to FALSE.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Adquisition.lvlib:Show Panel.vi
+
+*Event type:* Request
+
+:imgpath: Adquisition.lvlib_Show Panel.vi.png
+image::{imgpath}[Adquisition.lvlib:Show Panel.vi]
+
+*Description:*
+++++
+Send the Show Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Adquisition.lvlib:Hide Panel.vi
+
+*Event type:* Request
+
+:imgpath: Adquisition.lvlib_Hide Panel.vi.png
+image::{imgpath}[Adquisition.lvlib:Hide Panel.vi]
+
+*Description:*
+++++
+Send the Hide Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Adquisition.lvlib:Get Module Execution Status.vi
+
+*Event type:* Request
+
+:imgpath: Adquisition.lvlib_Get Module Execution Status.vi.png
+image::{imgpath}[Adquisition.lvlib:Get Module Execution Status.vi]
+
+*Description:*
+++++
+Fire the Get Module Execution Status request.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Adquisition.lvlib:Show Diagram.vi
+
+*Event type:* Request
+
+:imgpath: Adquisition.lvlib_Show Diagram.vi.png
+image::{imgpath}[Adquisition.lvlib:Show Diagram.vi]
+
+*Description:*
+++++
+This VI tells the Module to show its block diagram to facilitate troubleshooting (add probes, breakpoints, highlight execution, etc).
+
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Adquisition.lvlib:start adquisition.vi
+
+*Event type:* Request
+
+:imgpath: Adquisition.lvlib_start adquisition.vi.png
+image::{imgpath}[Adquisition.lvlib:start adquisition.vi]
+
+*Description:*
+++++
+start
+_____
+Created using Delacor QMH Event Scripter 5.0.0.112.
+++++
+
+===== Adquisition.lvlib:stop adquisition.vi
+
+*Event type:* Request
+
+:imgpath: Adquisition.lvlib_stop adquisition.vi.png
+image::{imgpath}[Adquisition.lvlib:stop adquisition.vi]
+
+*Description:*
+++++
+stop
+_____
+Created using Delacor QMH Event Scripter 5.0.0.112.
+++++
+
+===== Adquisition.lvlib:color selection.vi
+
+*Event type:* Request
+
+:imgpath: Adquisition.lvlib_color selection.vi.png
+image::{imgpath}[Adquisition.lvlib:color selection.vi]
+
+*Description:*
+++++
+selecciona el color del text overlay
+_____
+Created using Delacor QMH Event Scripter 5.0.0.112.
+++++
+
+===== Adquisition.lvlib:Module Did Init.vi
+
+*Event type:* Broadcast
+
+:imgpath: Adquisition.lvlib_Module Did Init.vi.png
+image::{imgpath}[Adquisition.lvlib:Module Did Init.vi]
+
+*Description:*
+++++
+Send the Module Did Init event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Adquisition.lvlib:Status Updated.vi
+
+*Event type:* Broadcast
+
+:imgpath: Adquisition.lvlib_Status Updated.vi.png
+image::{imgpath}[Adquisition.lvlib:Status Updated.vi]
+
+*Description:*
+++++
+Send the Status Updated event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Adquisition.lvlib:Error Reported.vi
+
+*Event type:* Broadcast
+
+:imgpath: Adquisition.lvlib_Error Reported.vi.png
+image::{imgpath}[Adquisition.lvlib:Error Reported.vi]
+
+*Description:*
+++++
+Send the Error Reported event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Adquisition.lvlib:Module Did Stop.vi
+
+*Event type:* Broadcast
+
+:imgpath: Adquisition.lvlib_Module Did Stop.vi.png
+image::{imgpath}[Adquisition.lvlib:Module Did Stop.vi]
+
+*Description:*
+++++
+Send the Module Did Stop event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Adquisition.lvlib:Update Module Execution Status.vi
+
+*Event type:* Broadcast
+
+:imgpath: Adquisition.lvlib_Update Module Execution Status.vi.png
+image::{imgpath}[Adquisition.lvlib:Update Module Execution Status.vi]
+
+*Description:*
+++++
+Broadcast event to specify whether or not the module is running.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+==== Analisis.lvlib
+
+===== Analisis.lvlib:Start Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: Analisis.lvlib_Start Module.vi.png
+image::{imgpath}[Analisis.lvlib:Start Module.vi]
+
+*Description:*
+++++
+Launches the Module Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Analisis.lvlib:Stop Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: Analisis.lvlib_Stop Module.vi.png
+image::{imgpath}[Analisis.lvlib:Stop Module.vi]
+
+*Description:*
+++++
+Send the Stop request to the Module's Main.vi.
+
+If <b>Wait for Module to Stop?</b> is TRUE, this VI will wait until the module main VI stops, and will timeout at the <b>Timeout to Wait for Stop</b> value. This value defaults to "-1", which means the VI will not timeout, and will always wait until the module main VI stops before completing execution.
+
+Note: The <b>Timeout to Wait for Stop</b> value is ignored if 'Wait for Module to Stop?' is set to FALSE.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Analisis.lvlib:Show Panel.vi
+
+*Event type:* Request
+
+:imgpath: Analisis.lvlib_Show Panel.vi.png
+image::{imgpath}[Analisis.lvlib:Show Panel.vi]
+
+*Description:*
+++++
+Send the Show Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Analisis.lvlib:Hide Panel.vi
+
+*Event type:* Request
+
+:imgpath: Analisis.lvlib_Hide Panel.vi.png
+image::{imgpath}[Analisis.lvlib:Hide Panel.vi]
+
+*Description:*
+++++
+Send the Hide Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Analisis.lvlib:Get Module Execution Status.vi
+
+*Event type:* Request
+
+:imgpath: Analisis.lvlib_Get Module Execution Status.vi.png
+image::{imgpath}[Analisis.lvlib:Get Module Execution Status.vi]
+
+*Description:*
+++++
+Fire the Get Module Execution Status request.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Analisis.lvlib:Show Diagram.vi
+
+*Event type:* Request
+
+:imgpath: Analisis.lvlib_Show Diagram.vi.png
+image::{imgpath}[Analisis.lvlib:Show Diagram.vi]
+
+*Description:*
+++++
+This VI tells the Module to show its block diagram to facilitate troubleshooting (add probes, breakpoints, highlight execution, etc).
+
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Analisis.lvlib:datos.vi
+
+*Event type:* Request
+
+:imgpath: Analisis.lvlib_datos.vi.png
+image::{imgpath}[Analisis.lvlib:datos.vi]
+
+*Description:*
+++++
+los datos adquridos se despliagan en analisis
+_____
+Created using Delacor QMH Event Scripter 5.0.0.112.
+++++
+
+===== Analisis.lvlib:Config.vi
+
+*Event type:* Request
+
+:imgpath: Analisis.lvlib_Config.vi.png
+image::{imgpath}[Analisis.lvlib:Config.vi]
+
+*Description:*
+++++
+configura el tiempo de adquisicion 
+_____
+Created using Delacor QMH Event Scripter 5.0.0.112.
+++++
+
+===== Analisis.lvlib:Module Did Init.vi
+
+*Event type:* Broadcast
+
+:imgpath: Analisis.lvlib_Module Did Init.vi.png
+image::{imgpath}[Analisis.lvlib:Module Did Init.vi]
+
+*Description:*
+++++
+Send the Module Did Init event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Analisis.lvlib:Status Updated.vi
+
+*Event type:* Broadcast
+
+:imgpath: Analisis.lvlib_Status Updated.vi.png
+image::{imgpath}[Analisis.lvlib:Status Updated.vi]
+
+*Description:*
+++++
+Send the Status Updated event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Analisis.lvlib:Error Reported.vi
+
+*Event type:* Broadcast
+
+:imgpath: Analisis.lvlib_Error Reported.vi.png
+image::{imgpath}[Analisis.lvlib:Error Reported.vi]
+
+*Description:*
+++++
+Send the Error Reported event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Analisis.lvlib:Module Did Stop.vi
+
+*Event type:* Broadcast
+
+:imgpath: Analisis.lvlib_Module Did Stop.vi.png
+image::{imgpath}[Analisis.lvlib:Module Did Stop.vi]
+
+*Description:*
+++++
+Send the Module Did Stop event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Analisis.lvlib:Update Module Execution Status.vi
+
+*Event type:* Broadcast
+
+:imgpath: Analisis.lvlib_Update Module Execution Status.vi.png
+image::{imgpath}[Analisis.lvlib:Update Module Execution Status.vi]
+
+*Description:*
+++++
+Broadcast event to specify whether or not the module is running.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+==== Base de datos.lvlib
+
+===== Base de datos.lvlib:Start Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: Base de datos.lvlib_Start Module.vi.png
+image::{imgpath}[Base de datos.lvlib:Start Module.vi]
+
+*Description:*
+++++
+Launches the Module Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Base de datos.lvlib:Stop Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: Base de datos.lvlib_Stop Module.vi.png
+image::{imgpath}[Base de datos.lvlib:Stop Module.vi]
+
+*Description:*
+++++
+Send the Stop request to the Module's Main.vi.
+
+If <b>Wait for Module to Stop?</b> is TRUE, this VI will wait until the module main VI stops, and will timeout at the <b>Timeout to Wait for Stop</b> value. This value defaults to "-1", which means the VI will not timeout, and will always wait until the module main VI stops before completing execution.
+
+Note: The <b>Timeout to Wait for Stop</b> value is ignored if 'Wait for Module to Stop?' is set to FALSE.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Base de datos.lvlib:Show Panel.vi
+
+*Event type:* Request
+
+:imgpath: Base de datos.lvlib_Show Panel.vi.png
+image::{imgpath}[Base de datos.lvlib:Show Panel.vi]
+
+*Description:*
+++++
+Send the Show Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Base de datos.lvlib:Hide Panel.vi
+
+*Event type:* Request
+
+:imgpath: Base de datos.lvlib_Hide Panel.vi.png
+image::{imgpath}[Base de datos.lvlib:Hide Panel.vi]
+
+*Description:*
+++++
+Send the Hide Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Base de datos.lvlib:Get Module Execution Status.vi
+
+*Event type:* Request
+
+:imgpath: Base de datos.lvlib_Get Module Execution Status.vi.png
+image::{imgpath}[Base de datos.lvlib:Get Module Execution Status.vi]
+
+*Description:*
+++++
+Fire the Get Module Execution Status request.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Base de datos.lvlib:Show Diagram.vi
+
+*Event type:* Request
+
+:imgpath: Base de datos.lvlib_Show Diagram.vi.png
+image::{imgpath}[Base de datos.lvlib:Show Diagram.vi]
+
+*Description:*
+++++
+This VI tells the Module to show its block diagram to facilitate troubleshooting (add probes, breakpoints, highlight execution, etc).
+
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Base de datos.lvlib:Module Did Init.vi
+
+*Event type:* Broadcast
+
+:imgpath: Base de datos.lvlib_Module Did Init.vi.png
+image::{imgpath}[Base de datos.lvlib:Module Did Init.vi]
+
+*Description:*
+++++
+Send the Module Did Init event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Base de datos.lvlib:Status Updated.vi
+
+*Event type:* Broadcast
+
+:imgpath: Base de datos.lvlib_Status Updated.vi.png
+image::{imgpath}[Base de datos.lvlib:Status Updated.vi]
+
+*Description:*
+++++
+Send the Status Updated event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Base de datos.lvlib:Error Reported.vi
+
+*Event type:* Broadcast
+
+:imgpath: Base de datos.lvlib_Error Reported.vi.png
+image::{imgpath}[Base de datos.lvlib:Error Reported.vi]
+
+*Description:*
+++++
+Send the Error Reported event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Base de datos.lvlib:Module Did Stop.vi
+
+*Event type:* Broadcast
+
+:imgpath: Base de datos.lvlib_Module Did Stop.vi.png
+image::{imgpath}[Base de datos.lvlib:Module Did Stop.vi]
+
+*Description:*
+++++
+Send the Module Did Stop event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Base de datos.lvlib:Update Module Execution Status.vi
+
+*Event type:* Broadcast
+
+:imgpath: Base de datos.lvlib_Update Module Execution Status.vi.png
+image::{imgpath}[Base de datos.lvlib:Update Module Execution Status.vi]
+
+*Description:*
+++++
+Broadcast event to specify whether or not the module is running.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+==== config.lvlib
+
+===== config.lvlib:Start Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: config.lvlib_Start Module.vi.png
+image::{imgpath}[config.lvlib:Start Module.vi]
+
+*Description:*
+++++
+Launches the Module Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== config.lvlib:Stop Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: config.lvlib_Stop Module.vi.png
+image::{imgpath}[config.lvlib:Stop Module.vi]
+
+*Description:*
+++++
+Send the Stop request to the Module's Main.vi.
+
+If <b>Wait for Module to Stop?</b> is TRUE, this VI will wait until the module main VI stops, and will timeout at the <b>Timeout to Wait for Stop</b> value. This value defaults to "-1", which means the VI will not timeout, and will always wait until the module main VI stops before completing execution.
+
+Note: The <b>Timeout to Wait for Stop</b> value is ignored if 'Wait for Module to Stop?' is set to FALSE.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== config.lvlib:Show Panel.vi
+
+*Event type:* Request
+
+:imgpath: config.lvlib_Show Panel.vi.png
+image::{imgpath}[config.lvlib:Show Panel.vi]
+
+*Description:*
+++++
+Send the Show Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== config.lvlib:Hide Panel.vi
+
+*Event type:* Request
+
+:imgpath: config.lvlib_Hide Panel.vi.png
+image::{imgpath}[config.lvlib:Hide Panel.vi]
+
+*Description:*
+++++
+Send the Hide Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== config.lvlib:Get Module Execution Status.vi
+
+*Event type:* Request
+
+:imgpath: config.lvlib_Get Module Execution Status.vi.png
+image::{imgpath}[config.lvlib:Get Module Execution Status.vi]
+
+*Description:*
+++++
+Fire the Get Module Execution Status request.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== config.lvlib:Show Diagram.vi
+
+*Event type:* Request
+
+:imgpath: config.lvlib_Show Diagram.vi.png
+image::{imgpath}[config.lvlib:Show Diagram.vi]
+
+*Description:*
+++++
+This VI tells the Module to show its block diagram to facilitate troubleshooting (add probes, breakpoints, highlight execution, etc).
+
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== config.lvlib:Module Did Init.vi
+
+*Event type:* Broadcast
+
+:imgpath: config.lvlib_Module Did Init.vi.png
+image::{imgpath}[config.lvlib:Module Did Init.vi]
+
+*Description:*
+++++
+Send the Module Did Init event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== config.lvlib:Status Updated.vi
+
+*Event type:* Broadcast
+
+:imgpath: config.lvlib_Status Updated.vi.png
+image::{imgpath}[config.lvlib:Status Updated.vi]
+
+*Description:*
+++++
+Send the Status Updated event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== config.lvlib:Error Reported.vi
+
+*Event type:* Broadcast
+
+:imgpath: config.lvlib_Error Reported.vi.png
+image::{imgpath}[config.lvlib:Error Reported.vi]
+
+*Description:*
+++++
+Send the Error Reported event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== config.lvlib:Module Did Stop.vi
+
+*Event type:* Broadcast
+
+:imgpath: config.lvlib_Module Did Stop.vi.png
+image::{imgpath}[config.lvlib:Module Did Stop.vi]
+
+*Description:*
+++++
+Send the Module Did Stop event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== config.lvlib:Update Module Execution Status.vi
+
+*Event type:* Broadcast
+
+:imgpath: config.lvlib_Update Module Execution Status.vi.png
+image::{imgpath}[config.lvlib:Update Module Execution Status.vi]
+
+*Description:*
+++++
+Broadcast event to specify whether or not the module is running.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+==== Mensajes .lvlib
+
+===== Mensajes .lvlib:Start Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: Mensajes .lvlib_Start Module.vi.png
+image::{imgpath}[Mensajes .lvlib:Start Module.vi]
+
+*Description:*
+++++
+Launches the Module Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Mensajes .lvlib:Stop Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: Mensajes .lvlib_Stop Module.vi.png
+image::{imgpath}[Mensajes .lvlib:Stop Module.vi]
+
+*Description:*
+++++
+Send the Stop request to the Module's Main.vi.
+
+If <b>Wait for Module to Stop?</b> is TRUE, this VI will wait until the module main VI stops, and will timeout at the <b>Timeout to Wait for Stop</b> value. This value defaults to "-1", which means the VI will not timeout, and will always wait until the module main VI stops before completing execution.
+
+Note: The <b>Timeout to Wait for Stop</b> value is ignored if 'Wait for Module to Stop?' is set to FALSE.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Mensajes .lvlib:Show Panel.vi
+
+*Event type:* Request
+
+:imgpath: Mensajes .lvlib_Show Panel.vi.png
+image::{imgpath}[Mensajes .lvlib:Show Panel.vi]
+
+*Description:*
+++++
+Send the Show Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Mensajes .lvlib:Hide Panel.vi
+
+*Event type:* Request
+
+:imgpath: Mensajes .lvlib_Hide Panel.vi.png
+image::{imgpath}[Mensajes .lvlib:Hide Panel.vi]
+
+*Description:*
+++++
+Send the Hide Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Mensajes .lvlib:Get Module Execution Status.vi
+
+*Event type:* Request
+
+:imgpath: Mensajes .lvlib_Get Module Execution Status.vi.png
+image::{imgpath}[Mensajes .lvlib:Get Module Execution Status.vi]
+
+*Description:*
+++++
+Fire the Get Module Execution Status request.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Mensajes .lvlib:Show Diagram.vi
+
+*Event type:* Request
+
+:imgpath: Mensajes .lvlib_Show Diagram.vi.png
+image::{imgpath}[Mensajes .lvlib:Show Diagram.vi]
+
+*Description:*
+++++
+This VI tells the Module to show its block diagram to facilitate troubleshooting (add probes, breakpoints, highlight execution, etc).
+
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Mensajes .lvlib:publicar mensaje.vi
+
+*Event type:* Request
+
+:imgpath: Mensajes .lvlib_publicar mensaje.vi.png
+image::{imgpath}[Mensajes .lvlib:publicar mensaje.vi]
+
+*Description:*
+++++
+publicar mensaje en el modulo mensajes
+_____
+Created using Delacor QMH Event Scripter 5.0.0.112.
+++++
+
+===== Mensajes .lvlib:Module Did Init.vi
+
+*Event type:* Broadcast
+
+:imgpath: Mensajes .lvlib_Module Did Init.vi.png
+image::{imgpath}[Mensajes .lvlib:Module Did Init.vi]
+
+*Description:*
+++++
+Send the Module Did Init event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Mensajes .lvlib:Status Updated.vi
+
+*Event type:* Broadcast
+
+:imgpath: Mensajes .lvlib_Status Updated.vi.png
+image::{imgpath}[Mensajes .lvlib:Status Updated.vi]
+
+*Description:*
+++++
+Send the Status Updated event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Mensajes .lvlib:Error Reported.vi
+
+*Event type:* Broadcast
+
+:imgpath: Mensajes .lvlib_Error Reported.vi.png
+image::{imgpath}[Mensajes .lvlib:Error Reported.vi]
+
+*Description:*
+++++
+Send the Error Reported event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Mensajes .lvlib:Module Did Stop.vi
+
+*Event type:* Broadcast
+
+:imgpath: Mensajes .lvlib_Module Did Stop.vi.png
+image::{imgpath}[Mensajes .lvlib:Module Did Stop.vi]
+
+*Description:*
+++++
+Send the Module Did Stop event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== Mensajes .lvlib:Update Module Execution Status.vi
+
+*Event type:* Broadcast
+
+:imgpath: Mensajes .lvlib_Update Module Execution Status.vi.png
+image::{imgpath}[Mensajes .lvlib:Update Module Execution Status.vi]
+
+*Description:*
+++++
+Broadcast event to specify whether or not the module is running.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+==== UI.lvlib
+
+===== UI.lvlib:Start Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: UI.lvlib_Start Module.vi.png
+image::{imgpath}[UI.lvlib:Start Module.vi]
+
+*Description:*
+++++
+Launches the Module Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== UI.lvlib:Stop Module.vi
+
+*Event type:* Not a DQMH Event
+
+:imgpath: UI.lvlib_Stop Module.vi.png
+image::{imgpath}[UI.lvlib:Stop Module.vi]
+
+*Description:*
+++++
+Send the Stop request to the Module's Main.vi.
+
+If <b>Wait for Module to Stop?</b> is TRUE, this VI will wait until the module main VI stops, and will timeout at the <b>Timeout to Wait for Stop</b> value. This value defaults to "-1", which means the VI will not timeout, and will always wait until the module main VI stops before completing execution.
+
+Note: The <b>Timeout to Wait for Stop</b> value is ignored if 'Wait for Module to Stop?' is set to FALSE.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== UI.lvlib:Show Panel.vi
+
+*Event type:* Request
+
+:imgpath: UI.lvlib_Show Panel.vi.png
+image::{imgpath}[UI.lvlib:Show Panel.vi]
+
+*Description:*
+++++
+Send the Show Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== UI.lvlib:Hide Panel.vi
+
+*Event type:* Request
+
+:imgpath: UI.lvlib_Hide Panel.vi.png
+image::{imgpath}[UI.lvlib:Hide Panel.vi]
+
+*Description:*
+++++
+Send the Hide Panel request to the Module's Main.vi.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== UI.lvlib:Get Module Execution Status.vi
+
+*Event type:* Request
+
+:imgpath: UI.lvlib_Get Module Execution Status.vi.png
+image::{imgpath}[UI.lvlib:Get Module Execution Status.vi]
+
+*Description:*
+++++
+Fire the Get Module Execution Status request.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== UI.lvlib:Show Diagram.vi
+
+*Event type:* Request
+
+:imgpath: UI.lvlib_Show Diagram.vi.png
+image::{imgpath}[UI.lvlib:Show Diagram.vi]
+
+*Description:*
+++++
+This VI tells the Module to show its block diagram to facilitate troubleshooting (add probes, breakpoints, highlight execution, etc).
+
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== UI.lvlib:Module Did Init.vi
+
+*Event type:* Broadcast
+
+:imgpath: UI.lvlib_Module Did Init.vi.png
+image::{imgpath}[UI.lvlib:Module Did Init.vi]
+
+*Description:*
+++++
+Send the Module Did Init event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== UI.lvlib:Status Updated.vi
+
+*Event type:* Broadcast
+
+:imgpath: UI.lvlib_Status Updated.vi.png
+image::{imgpath}[UI.lvlib:Status Updated.vi]
+
+*Description:*
+++++
+Send the Status Updated event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== UI.lvlib:Error Reported.vi
+
+*Event type:* Broadcast
+
+:imgpath: UI.lvlib_Error Reported.vi.png
+image::{imgpath}[UI.lvlib:Error Reported.vi]
+
+*Description:*
+++++
+Send the Error Reported event to any VI registered to listen to events from the owning module.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== UI.lvlib:Module Did Stop.vi
+
+*Event type:* Broadcast
+
+:imgpath: UI.lvlib_Module Did Stop.vi.png
+image::{imgpath}[UI.lvlib:Module Did Stop.vi]
+
+*Description:*
+++++
+Send the Module Did Stop event to any VI registered to listen to this module's broadcast events.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+===== UI.lvlib:Update Module Execution Status.vi
+
+*Event type:* Broadcast
+
+:imgpath: UI.lvlib_Update Module Execution Status.vi.png
+image::{imgpath}[UI.lvlib:Update Module Execution Status.vi]
+
+*Description:*
+++++
+Broadcast event to specify whether or not the module is running.
+_____
+Based on Delacor QMH Project Template 5.0.0.82.
+++++
+
+=== Libraries
+
+This section describes libraries public VIs.
+
+=== Classes
+
+This section describes classes public VIs.
+
+== Legal Information
+
+=== Document creation
+
+This document has been generated using the following tools.
+
+==== Antidoc
+
+Project website: https://wovalab.gitlab.io/open-source/labview-doc-generator/[Antidoc] 
+
+Maintainer website: https://wovalab.com[Wovalab] 
+
+BSD 3-Clause License
+
+Copyright (C) 2019, Wovalab,
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+==== Asciidoc for LabVIEW(TM)
+
+Project website: https://wovalab.gitlab.io/open-source/asciidoc-toolkit/[Asciidoc toolkit] 
+
+Maintainer website: https://wovalab.com[Wovalab] 
+
+BSD 3-Clause License
+
+Copyright (C) 2019, Wovalab,
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+==== Graph Builder
+
+Project website: https://gitlab.com/cgambini/graph-builder[Graph Builder]
+
+BSD 3-Clause License
+
+Copyright (c) 2020, Cyril GAMBINI
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+=== Product used in the project
+
+The documented project has been developed with the following products.
+
+==== DQMH(R)
+
+Copyright (C) 2015-2020 by Delacor, LLC. All Rights Reserved.
+
+Find more details on https://delacor.com/products/dqmh/[Delacor] website
+
