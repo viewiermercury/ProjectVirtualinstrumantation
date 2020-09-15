@@ -21,13 +21,13 @@
 		<Item Name="tester" Type="Folder">
 			<Item Name="Test Adquisition API.vi" Type="VI" URL="../Libraries/Adquisition/Test Adquisition API.vi"/>
 			<Item Name="Test Analisis API.vi" Type="VI" URL="../Libraries/Analisis/Test Analisis API.vi"/>
+			<Item Name="Test Base de datos API.vi" Type="VI" URL="../Libraries/Base de datos/Test Base de datos API.vi"/>
 			<Item Name="Test config API.vi" Type="VI" URL="../Libraries/config/Test config API.vi"/>
 			<Item Name="Test Mensajes  API.vi" Type="VI" URL="../Libraries/Mensajes/Test Mensajes  API.vi"/>
 			<Item Name="Test UI API.vi" Type="VI" URL="../Libraries/UI/Test UI API.vi"/>
 		</Item>
 		<Item Name="monedas counter.vi" Type="VI" URL="../Libraries/monedas counter.vi"/>
 		<Item Name="monedas denominacion.vi" Type="VI" URL="../Libraries/monedas denominacion.vi"/>
-		<Item Name="Test Base de datos API.vi" Type="VI" URL="../Libraries/Base de datos/Test Base de datos API.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
 				<Item Name="AddNamedRendezvousPrefix.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/rendezvs.llb/AddNamedRendezvousPrefix.vi"/>
