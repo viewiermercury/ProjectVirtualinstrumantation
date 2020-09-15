@@ -20,6 +20,7 @@
 				<Item Name="Show Diagram Argument--cluster.ctl" Type="VI" URL="../Show Diagram Argument--cluster.ctl"/>
 				<Item Name="start adquisition Argument--cluster.ctl" Type="VI" URL="../start adquisition Argument--cluster.ctl"/>
 				<Item Name="stop adquisition Argument--cluster.ctl" Type="VI" URL="../stop adquisition Argument--cluster.ctl"/>
+				<Item Name="color selection Argument--cluster.ctl" Type="VI" URL="../color selection Argument--cluster.ctl"/>
 			</Item>
 			<Item Name="Broadcast" Type="Folder">
 				<Item Name="Did Init Argument--cluster.ctl" Type="VI" URL="../Did Init Argument--cluster.ctl"/>
@@ -35,6 +36,7 @@
 			<Item Name="Show Diagram.vi" Type="VI" URL="../Show Diagram.vi"/>
 			<Item Name="start adquisition.vi" Type="VI" URL="../start adquisition.vi"/>
 			<Item Name="stop adquisition.vi" Type="VI" URL="../stop adquisition.vi"/>
+			<Item Name="color selection.vi" Type="VI" URL="../color selection.vi"/>
 		</Item>
 		<Item Name="Start Module.vi" Type="VI" URL="../Start Module.vi"/>
 		<Item Name="Synchronize Module Events.vi" Type="VI" URL="../Synchronize Module Events.vi"/>
